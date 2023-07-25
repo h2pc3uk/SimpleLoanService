@@ -24,7 +24,7 @@ public class ApplicantRepository : IApplicantRepository
     public async Task<int> AddApplicant(Applicant applicant)
     {
         const string sql = @"
-            INSERT INTO Applicants(FirstName, LastName, Email, Phone, DPB)
+            INSERT INTO Applicants(FirstName, LastName, Email, Phone, DOB)
             VALUES(@FirstName, @LastName, @Email, @Phone, @DOB);
             SELECT CAST(SCOPE_IDENTITY() as int);
         ";

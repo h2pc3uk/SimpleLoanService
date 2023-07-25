@@ -10,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<ILoanService, LoanService>();
 builder.Services.AddScoped<ILoanRepository, LoanRepository>();
 builder.Services.AddScoped<IApplicantRepository, ApplicantRepository>();
+builder.Services.AddScoped<IEmploymentInformationRepository, EmploymentInformationRepository>();
 
 // Database connection
 builder.Services.AddScoped<IDbConnection>(b =>
@@ -24,7 +25,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowAllOrigins", builder =>
     {
         builder.AllowAnyOrigin()
-            .AllowAnyHeader()
+            .AllowAnyMethod()
             .AllowAnyHeader();
     });
 });

@@ -18,30 +18,24 @@ public class LoanController : ControllerBase
     }
 
     [HttpPost]
-    [Route("api/Loan/AddApplicantWithLoan")]
-    public async Task<IActionResult> AddApplicantWithLoan(ApplicantLoanDTO applicantLoan)
+    [Route("SubmitApplication")]
+    public async Task<IActionResult> SubmitApplication([FromBody] LoanApplication loanApplication)
     {
-        var result = await _loanService.AddApplicantWithLoan(applicantLoan.Applicant, applicantLoan.Loan);
-
-        return CreatedAtAction(nameof(AddApplicantWithLoan), new
-        {
-            applicationId = result.Item1, loanId = result.Item2
-        });
-    }
-
-    [HttpPost]
-    [Route("api/Loan/AddLoan")]
-    public async Task<ActionResult<(int, int)>> AddLoan(ApplicantLoanDTO  applicatLoan)
-    {
-        var (applicantId, loanId) =
-            await _loanService.AddApplicantWithLoan(applicatLoan.Applicant, applicatLoan.Loan);
+        // Extract individual data elements from the incoming loanApplication object
+        // Convert them into the format expcted by _loanService.AddApplicantWithLoan method
+        var applicant = loanApplication.Applicant;
+        var loan = loanApplication.PersonalLoan;
+        var employmentInfo = loanApplication.EmploymentInformation;
         
-        // if the loanId is -1, it means there was a foreign key violation
-        if (loanId == -1)
+        // Handle the incoming data
+        // This could involve calling a service method to insert the data into the database
+        var result = await _loanService.AddApplicantWithLoanAndEmploymentInfo(applicant, loan, employmentInfo);
+        
+        // Return an appropriate HTTP response
+        // For example, if the data was inserted successfully, you could return a 201 created status code
+        return CreatedAtAction(nameof(SubmitApplication), new
         {
-            return BadRequest("Invalid foreign key.");
-        }
-
-        return Ok(new { applicantId, loanId });
+            applicantionId = result.Item1, loanId = result.Item2
+        });
     }
 }
